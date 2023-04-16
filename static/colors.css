@@ -1,0 +1,41 @@
+:root {
+	--red-color: rgb(255, 69, 58);
+	--orange-color: rgb(255, 195, 10);
+	--green-color: rgb(50, 215, 75);
+	--mint-color: rgb(102, 212, 207);
+	--teal-color: rgb(106, 196, 220);
+	--cyan-color: rgb(90, 200, 245);
+	--blue-color: rgb(10, 132, 255);
+	--indigo-color: rgb(94, 92, 230);
+	--purple-color: rgb(191, 90, 242);
+	--pink-color: rgb(255, 55, 95);
+	--brown-color: rgb(172, 142, 104);
+	--gray-1-color: rgb(142, 142, 147);
+	--gray-2-color: rgb(99, 99, 102);
+	--gray-3-color: rgb(72, 72, 74);
+	--gray-4-color: rgb(58, 58, 60);
+	--gray-5-color: rgb(44, 44, 46);
+	--gray-6-color: rgb(28, 28, 30);
+
+	--gray-7-color: rgb(11, 11, 15);
+	--gray-8-color: rgb(0, 0, 0);
+
+	/* Main theme */
+	--font-color: var(--gray-1-color);
+	--border-color: var(--gray-5-color);
+	--border-width: 1px;
+	--border-radius: 10px;
+
+	--control-spacing: 10px;
+
+	/* Window customizations */
+	--window-background-color: rgba(0, 0, 0, 0.8);
+
+	--window-border-color: var(--gray-5-color);
+	--window-border-width: 1px;
+	--window-border-radius: 10px;
+
+	--window-header-height: 32px;
+	--window-control-button-size: 16px;
+	--window-control-area-width: 100px;
+}

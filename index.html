@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>snip.me</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap"
+		crossorigin="anonymous">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+		crossorigin="anonymous">
+
+	<style>
+		#preview {
+			box-sizing: border-box;
+
+			min-width: 515px;
+			min-height: 290px;
+			max-width: 100vw;
+			max-height: 100vh;
+
+			padding: 32px;
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			background: none;
+		}
+
+		#window {
+			width: 100%;
+			height: 100%;
+
+			background: var(--window-background-color);
+			border-radius: var(--window-border-radius);
+			border: var(--window-border-width) solid var(--window-border-color);
+			box-shadow:
+				/* outer border */
+				0px 0px 0px 1px var(--window-background-color),
+				/* shadow */
+				1px 1px 40px 5px var(--window-background-color);
+
+			display: flex;
+			flex-direction: column;
+		}
+
+		#window-header {
+			box-sizing: border-box;
+			padding: 5px;
+			flex: 0 0 var(--window-header-height);
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
+		#window-title::after {
+			flex: 0 0 var(--window-control-area-width);
+			content: "";
+		}
+
+		#window-controls {
+			flex: 0 0 var(--window-control-area-width);
+			display: flex;
+			justify-content: space-evenly;
+			align-items: center;
+
+		}
+
+		.window-control-button {
+			width: var(--window-control-button-size);
+			height: var(--window-control-button-size);
+			border-radius: 50%;
+		}
+
+		#window-title {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			font-family: 'JetBrains Mono';
+			color: var(--gray-2-color);
+		}
+
+		#window-content {
+			flex: 1;
+			padding: 10px;
+
+			font-family: 'JetBrains Mono';
+			font-size: larger;
+		}
+
+	</style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
+	<script src="static/3rdparty/markdown-it-emoji.min.js"></script>
+	<script src="static/3rdparty/markdown-it-math.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<link rel="stylesheet" href="static/3rdparty/github-dark-dimmed.css">
+
+	<script src="static/3rdparty/dom-to-image.min.js"></script>
+	<script src="static/3rdparty/FileSaver.min.js"></script>
+
+	<link rel="stylesheet" href="static/colors.css">
+	<link rel="stylesheet" href="static/theme.css">
+	<link rel="stylesheet" href="static/controls.css">
+	<link rel="stylesheet" href="static/popup.css">
+	<script defer src="static/main.js"></script>
+</head>
+
+<body>
+	<div id="preview">
+		<div id="window">
+			<div id="window-header">
+				<div id="window-controls">
+					<span class="window-control-button" style="background: var(--red-color);"></span>
+					<span class="window-control-button" style="background: var(--green-color);"></span>
+					<span class="window-control-button" style="background: var(--orange-color);"></span>
+				</div>
+				<div id="window-title">
+					<div>
+						Untitled-1
+					</div>
+				</div>
+			</div>
+			<div id="window-content"></div>
+		</div>
+	</div>
+
+	<style>
+		#preview-size-controls {
+			position: absolute;
+
+			left: 50%;
+			width: 60%;
+
+			bottom: 2%;
+			height: 10%;
+
+			transform: translateX(-50%);
+		}
+
+		#window-content-editor {
+			position: absolute;
+
+			left: 2%;
+			width: 15%;
+
+			bottom: 2%;
+			height: 30%;
+
+			flex-direction: column;
+		}
+
+		#export-pane {
+			position: absolute;
+
+			right: 2%;
+			width: 15%;
+
+			bottom: 2%;
+			height: 10%;
+		}
+
+		#export-button {
+			box-sizing: border-box;
+			width: 100%;
+			height: 100%;
+			padding: 10px;
+
+			border: none;
+			border-radius: var(--border-radius);
+
+			background-color: var(--gray-5-color);
+		}
+
+	</style>
+
+	<div class="control-pane" id="preview-size-controls">
+		<div class="control-pane-handle"></div>
+		<div class="control-item">
+			<label>Width</label>
+			<input type="text" id="preview-width-slider" value="20vw">
+		</div>
+		<div class="control-item">
+			<label>Height</label>
+			<input type="text" id="preview-height-slider" value="20vh">
+		</div>
+		<div class="control-item">
+			<label>Padding</label>
+			<input type="text" id="preview-padding-input" value="32">
+		</div>
+		<div class="control-item">
+			<label>Background</label>
+			<select id="background-theme-selector"></select>
+		</div>
+		<div class="control-pane-handle"></div>
+	</div>
+
+	<div class="control-pane" id="window-content-editor">
+		<div class="control-item" style="flex: 1">
+			<label>Title</label>
+			<input type="text" id="title-input" autocomplete="false" autocapitalize="none" autocorrect="off"
+				spellcheck="false" value="Untitled">
+		</div>
+		<div class="control-item" style="flex: 3">
+			<label>Text</label>
+			<textarea type="text" id="editor-content" autocomplete="false" autocapitalize="none" autocorrect="off"
+				spellcheck="false"># Markdown :clap:</textarea>
+		</div>
+		<div class="control-item" style="flex: 1">
+			<label>Font Size</label>
+			<input type="text" id="editor-font-size-input" autocomplete="false" autocapitalize="none" autocorrect="off"
+				spellcheck="false" value="larger">
+		</div>
+		<div class="control-pane-handle"></div>
+	</div>
+
+	<div class="control-pane" id="export-pane">
+		<div class="control-pane-handle"></div>
+		<div class="control-item">
+			<button id="export-button">Save</button>
+		</div>
+		<div class="control-item">
+			<label>Save As</label>
+			<select id="export-selector"></select>
+		</div>
+		<div class="control-pane-handle"></div>
+	</div>
+
+	<style>
+		#preview-size-popup {
+			bottom: 15vh;
+			left: 50%;
+		}
+
+	</style>
+
+	<div class="popup" id="preview-size-popup"></div>
+</body>
+
+</html>

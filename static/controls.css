@@ -1,0 +1,36 @@
+.control-pane {
+	box-sizing: border-box;
+	padding: 25px;
+
+	z-index: 5;
+	box-shadow: 1px 1px 25px 1px var(--window-background-color);
+
+	background: var(--gray-6-color);
+	border: var(--border-width) solid var(--border-color);
+	border-radius: var(--border-radius);
+
+	display: flex;
+}
+
+.control-pane-handle {
+	background: var(--gray-4-color);
+	content: "";
+	flex: 0 0 10px;
+	border-radius: 2px;
+}
+
+.control-item {
+	margin-left: var(--control-spacing);
+	margin-right: var(--control-spacing);
+
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+}
+
+.control-item label {
+	font-size: small;
+	font-weight: 900;
+}

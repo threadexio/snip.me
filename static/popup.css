@@ -1,0 +1,17 @@
+.popup {
+	position: absolute;
+	transform: translateX(-50%);
+	z-index: 10;
+	padding: 10px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	background: var(--gray-8-color);
+	border-radius: var(--border-radius);
+
+	opacity: 0;
+	transition: all 0.3s ease;
+}
